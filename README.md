@@ -1,0 +1,2 @@
+# mandoo-model
+Image detection
