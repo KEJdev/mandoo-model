@@ -7,8 +7,7 @@ class Simple_CNN(object):
     def __init__(self, X, num_classes):
 
         self.keep_prob = tf.placeholder(tf.float32, name="drop_out_keep_prob")
-
-        # (None, 224, 224, 3) -> (32, 224, 224, 3)
+        
         W1 = tf.Variable(tf.random_normal([3, 3, 3, 32], stddev=0.01))
         L1 = tf.nn.conv2d(X, W1, strides=[1, 1, 1, 1], padding='SAME')
         L1 = tf.nn.relu(L1)
