@@ -88,3 +88,34 @@ def generator(
             yield (img, y_cate)
         label_number += 1
     
+def convert_to_query_db_data_for_generator(
+    img_list, 
+    label_list, 
+    input_size, 
+    num_query, 
+    max_ref_count):
+    """ load image with labels from filename"""
+    label_reference_cnt = {}
+    label_visit = []
+    queries = []
+    queries_img = []
+    references = []
+    reference_img = []
+    used_datapath = []
+    for i, (img, label) in enumerate(zip(img_list, label_list)):
+        key = "/" + str(label) + "@" + str(i) + ".jpg"
+        if label not in label_visit and len(label_visit) < num_query:
+            queries.append(key)
+            queries_img.append(img)
+            label_visit.append(label)
+        elif label in label_visit:
+            if (label in label_reference_cnt.keys()) and label_reference_cnt[label] > max_ref_count:
+                continue
+            else:
+                label_reference_cnt[label] = label_reference_cnt.get(label, 0) + 1
+            references.append(key)
+            reference_img.append(img)
+    return queries, references, queries_img, reference_img
+
+
+
