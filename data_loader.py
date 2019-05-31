@@ -116,9 +116,6 @@ def convert_to_query_db_data_for_generator(
             references.append(key)
             reference_img.append(img)
     return queries, references, queries_img, reference_img
-<<<<<<< HEAD
-    
-=======
 
 def convert_to_query_db_data_fixed_window(img_list, label_list, input_size, num_query, max_ref_count):
     """ load image with labels from filename"""
