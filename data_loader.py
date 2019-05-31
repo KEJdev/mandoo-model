@@ -116,3 +116,4 @@ def convert_to_query_db_data_for_generator(
             references.append(key)
             reference_img.append(img)
     return queries, references, queries_img, reference_img
+    
