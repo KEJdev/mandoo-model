@@ -208,3 +208,23 @@ def get_assignment_map_from_checkpoint(tvars, init_checkpoint):
   return (assignment_map, initialized_variable_names)
 
 
+# git data fun 은 조금 잇다가 ...
+# 먼저 get dataset 부터 ...
+
+
+def get_balanced_dual_dataset(train_dataset_path, batch_size, epochs, num_classes=1384):
+    dataset = tf.data.Dataset.from_generator(
+        lambda: alternative_aligned_generator(train_dataset_path),
+        output_types=(tf.float32, tf.float32, tf.int64, tf.int64),
+        output_shapes=(
+            tf.TensorShape([224, 224, 3]),
+            tf.TensorShape([224, 224, 3]),
+            tf.TensorShape([num_classes]),
+            tf.TensorShape([num_classes])))
+
+    dataset = dataset.shuffle(6000).batch(batch_size).repeat(epochs)
+    return dataset
+
+
+
+
