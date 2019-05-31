@@ -211,6 +211,37 @@ def get_assignment_map_from_checkpoint(tvars, init_checkpoint):
 # git data fun 은 조금 잇다가 ...
 # 먼저 get dataset 부터 ...
 
+def get_dual_dataset(train_dataset_path, batch_size, epochs, num_classes=1383):
+    dataset = tf.data.Dataset.from_generator(
+                                lambda:generator(train_dataset_path),
+                                output_types=(tf.float32, tf.int64),
+                                output_shapes=(
+                                    tf.TensorShape([224, 224, 3]),
+                                    tf.TensorShape([num_classes])))
+
+    aligned_dataset = tf.data.Dataset.from_generator(
+                                lambda:aligned_generator(train_dataset_path),
+                                output_types=(tf.float32, tf.int64),
+                                output_shapes=(
+                                    tf.TensorShape([224, 224, 3]),
+                                    tf.TensorShape([num_classes])))
+    
+    dataset_shuffled_1 = tf.data.Dataset.from_generator(
+                                lambda:generator(train_dataset_path),
+                                output_types=(tf.float32, tf.int64),
+                                output_shapes=(
+                                    tf.TensorShape([224, 224, 3]),
+                                    tf.TensorShape([num_classes]))).shuffle(1000, seed=6)
+
+
+    final_dataset_1 = dataset.concatenate(dataset)
+    final_dataset_2 = aligned_dataset.concatenate(dataset_shuffled_1)
+
+    final_dataset_1 = final_dataset_1.shuffle(6000, seed=10).batch(batch_size).repeat(epochs)
+    final_dataset_2 = final_dataset_2.shuffle(6000, seed=10).batch(batch_size).repeat(epochs)
+
+    return final_dataset_1, final_dataset_2
+
 
 def get_balanced_dual_dataset(train_dataset_path, batch_size, epochs, num_classes=1384):
     dataset = tf.data.Dataset.from_generator(
