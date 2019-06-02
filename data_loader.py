@@ -268,5 +268,21 @@ ef alternative_aligned_generator(train_dataset_path, num_classes=1384, input_sha
                 class_num_map[class_name] = class_index
             class_index +=1
 
+        gen_path_list = []
+        gen_label_list = []
+        for outputs in os.walk(train_dataset_path):
+            class_name, _, files = outputs
+            for filename in files:
+                for enum in range(2):
+                    if enum == 0:
+                        class_name_list = list(class_name_map.keys())
+                        ran_class_name = random.choice(class_name_list)
+                    else:
+                        ran_class_name = class_name
+                        # align
+                    ran_filename = random.choice(class_name_map[ran_class_name])
+                    gen_path_list.append(os.path.join(ran_class_name, ran_filename))
+                    gen_label_list.append(class_num_map[ran_class_name])
+        return np.array(gen_path_list), np.array(gen_label_list)
 
 
