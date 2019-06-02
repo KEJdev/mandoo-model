@@ -253,7 +253,7 @@ def get_balanced_dual_dataset(train_dataset_path, batch_size, epochs, num_classe
     dataset = dataset.shuffle(6000).batch(batch_size).repeat(epochs)
     return dataset
 
-ef alternative_aligned_generator(train_dataset_path, num_classes=1384, input_shape=(224, 224)):
+def alternative_aligned_generator(train_dataset_path, num_classes=1384, input_shape=(224, 224)):
 
     def gen_list():
         class_name_map = {}
