@@ -290,6 +290,7 @@ def alternative_aligned_generator(train_dataset_path, num_classes=1384, input_sh
 
     random_indexes = np.random.permutation(range(len(gen_label_list_1)))
     print(random_indexes)
+    
     gen_path_list_1 = gen_path_list_1[random_indexes]
     gen_label_list_1 = gen_label_list_1[random_indexes]
     gen_path_list_2 = gen_path_list_2[random_indexes]
@@ -305,3 +306,22 @@ def alternative_aligned_generator(train_dataset_path, num_classes=1384, input_sh
         y_cate_2 = tf.keras.utils.to_categorical(label_number_2, num_classes=num_classes)
         yield (img_1, img_2, y_cate_1, y_cate_2)
 
+def generator(
+    train_dataset_path, 
+    num_classes=1383, 
+    input_shape=(224, 224)):
+    label_number = 0
+    for outputs in os.walk(train_dataset_path):
+        root, _, files = outputs
+        if not files:
+            continue
+        for filename in files:
+            img_path = os.path.join(root, filename)
+            try:
+                img = image_load(img_path, img_size=input_shape[:2])
+            except:
+                continue
+            y_cate = tf.keras.utils.to_categorical(
+                label_number, num_classes=num_classes)
+            yield (img, y_cate)
+        label_number += 1
