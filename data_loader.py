@@ -325,3 +325,32 @@ def generator(
                 label_number, num_classes=num_classes)
             yield (img, y_cate)
         label_number += 1
+
+def aligned_generator(
+    train_dataset_path, 
+    num_classes=1383, 
+    input_shape=(224, 224)):
+    label_number = 0
+    for outputs in os.walk(train_dataset_path):
+        root, _, files = outputs
+        img_list = []
+        label_list = []
+        if not files:
+            continue
+        for filename in files:
+            img_path = os.path.join(root, filename)
+            try:
+                img = image_load(img_path, img_size=input_shape[:2])
+                img_list.append(img)
+            except:
+                continue
+            y_cate = tf.keras.utils.to_categorical(
+                label_number, num_classes=num_classes)
+            label_list.append(y_cate)
+        datasets = list(zip(img_list, label_list))
+        datasets = np.random.permutation(datasets)
+        for dataset in datasets:
+            img, label = dataset
+            yield (img, label)
+        label_number += 1
+        
