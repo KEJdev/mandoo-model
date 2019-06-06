@@ -354,3 +354,17 @@ def aligned_generator(
             yield (img, label)
         label_number += 1
         
+def get_triplet_dataset(train_dataset_path, batch_size, epochs, num_classes=1384):
+    dataset = tf.data.Dataset.from_generator(
+        lambda: triplet_generator(train_dataset_path),
+        output_types=(tf.float32, tf.float32, tf.float32, tf.int64, tf.int64, tf.int64),
+        output_shapes=(
+            tf.TensorShape([224, 224, 3]),
+            tf.TensorShape([224, 224, 3]),
+            tf.TensorShape([224, 224, 3]),
+            tf.TensorShape([num_classes]),
+            tf.TensorShape([num_classes]),
+            tf.TensorShape([num_classes])))
+
+    dataset = dataset.shuffle(6000).batch(batch_size).repeat(epochs)
+    return dataset
