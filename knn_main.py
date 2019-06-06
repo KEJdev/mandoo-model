@@ -149,3 +149,10 @@ def bind_model(sess):
     args.add_argument('--mode', type=str, default='train')
     args.add_argument('--iteration', type=str, default='0')
     args.add_argument('--pause', type=int, default=0)
+    
+    config = args.parse_args()
+    print("Model configuration", config)
+
+    # training parameters
+    nb_epoch = config.epochs
+    batch_size = config.batch_size
