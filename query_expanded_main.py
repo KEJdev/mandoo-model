@@ -31,8 +31,6 @@ from delf import delf_config_pb2
 from delf import feature_extractor
 from delf import feature_io
 
-
-
 local_infer = None
 
 # bind training model with nsml
