@@ -94,3 +94,50 @@ def bind_model(sess):
             ranked_list = ranked_list[:5000]
             retrieval_results[query] = ranked_list
         return list(zip(range(len(retrieval_results)), retrieval_results.items()))
+
+    
+    if __name__ == '__main__':
+    args = argparse.ArgumentParser()
+
+    # hyperparameters
+    args.add_argument('--epochs', type=int, default=200)
+    args.add_argument('--batch_size', type=int, default=64)
+    args.add_argument('--debug', action='store_true', help='debug mode')
+    args.add_argument('--debug_data', type=str, default="./debug_data", help='debug_data')
+    args.add_argument('--lr', type=float, default=0.0001, help='learning rate')
+
+    args.add_argument('--dev_querynum', type=int, default=300, help='dev split percentage')
+    args.add_argument('--dev_referencenum', type=int, default=20, help='dev split percentage')
+
+    # augmentation
+    args.add_argument('--augmentation', action='store_true', help='apply random crop in processing')
+    args.add_argument('--crop', action='store_true', help='set crop images')
+    args.add_argument('--fliplr', action='store_true', help='set fliplr')
+    args.add_argument('--flipud', action='store_true', help='set flipud')
+    args.add_argument('--gausian', action='store_true', help='set gausian')
+    args.add_argument('--dropout', action='store_true', help='set dropout')
+    args.add_argument('--noise', action='store_true', help='set noise')
+    args.add_argument('--rotate', action='store_true', help='rotate -45 degree to +45 degree')
+    # loss calculation
+    args.add_argument('--train_logits', action='store_true', help='train similarity and logit jointly')
+    args.add_argument('--train_sim', action='store_true', help='train similarity and logit jointly')
+    args.add_argument('--train_sim_dist', action='store_true', help='train similarity and logit jointly using squared loss')
+    args.add_argument('--train_max_neg', action='store_true', help='train max negative loss')
+    args.add_argument('--train_max_neg_topk', type=int, default=5, help='set top_k max negative')
+    args.add_argument('--train_triplet', action="store_true", help="train triplet loss")
+    # pre trained model
+    args.add_argument('--pretrained_model', type=str, default=None, help='restore pretrained model')
+
+    args.add_argument('--stop_gradient_sim', action='store_true', help='stop gradient similarity')
+    args.add_argument('--skipcon_attn', action='store_true', help='skip connection attention')
+    args.add_argument('--logit_concat_sim', action='store_true', help='skip connection attention')
+
+    # DONOTCHANGE: They are reserved for nsml
+    args.add_argument('--mode', type=str, default='train')
+    args.add_argument('--iteration', type=str, default='0')
+    args.add_argument('--pause', type=int, default=0)
+
+    config = args.parse_args()
+    print("Model configuration", config)
+    
+    
