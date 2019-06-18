@@ -139,5 +139,23 @@ def bind_model(sess):
 
     config = args.parse_args()
     print("Model configuration", config)
-    
-    
+   
+    nb_epoch = config.epochs
+    batch_size = config.batch_size
+
+    """-------- Model Part -------------------------------------------------"""
+    num_classes = 1384
+    input_shape = (224, 224, 3)  # input image shape
+
+    # set input placeholders
+    X1 = tf.placeholder(
+        tf.float32,
+        [None, input_shape[0], input_shape[1], 3],
+        name="input_X1")
+    Y1 = tf.placeholder(tf.float32, [None, num_classes], name="input_Y1")
+    X2 = tf.placeholder(
+        tf.float32,
+        [None, input_shape[0], input_shape[1], 3],
+        name="input_X2"
+    )
+    Y2 = tf.placeholder(tf.float32, [None, num_classes], name="input_Y2")
