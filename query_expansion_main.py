@@ -22,7 +22,7 @@ from data_loader import get_assignment_map_from_checkpoint,\
     convert_to_query_db_data, convert_to_query_db_data_fixed_window, \
     convert_to_query_db_data_for_generator
 from measure import evaluate_mAP, evaluate_rank
-from inference import get_feature, query_expanded_get_feature
+from inference import get_feature
 from train_utils import l2_normalize
 from loss import batch_hard_triplet_loss
 from model.delf_model import *
@@ -71,18 +71,21 @@ def bind_model(sess):
 
         else:
             # debug
-            _, expanded_query_vecs, _, reference_vecs = query_expanded_get_feature(_query_img, _reference_img, sess, batch_size)
+            _, query_vecs, _, reference_vecs = get_feature(_query_img, _reference_img, sess, batch_size)
             db = references
 
+        expanded_queries= l2_normalize(query_vecs)
         reference_vecs = l2_normalize(reference_vecs)
         total_sim_matrix = np.empty(
-            (expanded_query_vecs.shape[0], reference_vecs.shape[0]),
-            np.float32)
-        for query in expanded_query_vecs:
-            query_vecs = l2_normalize(query)
-            sim_matrix = np.dot(query_vecs, reference_vecs.T)
-            sim_matrix = np.expand_dims(np.sum(sim_matrix, axis=0), axis=0)
+                (expanded_queries.shape[0], reference_vecs.shape[0]),
+                 np.float32)
+        for expanded_query in expanded_queries:
+            sim_matrix = np.dot(expanded_query, reference_vecs.T)
+            sim_matrix = np.expand_dims(
+                np.sum(sim_matrix, axis=0),
+                axis=0)
             np.append(total_sim_matrix, sim_matrix, axis=0)
+
         indices = np.argsort(total_sim_matrix, axis=1)
         indices = np.flip(indices, axis=1)
 
