@@ -105,5 +105,3 @@ def query_expanded_get_feature(queries, references, sess, batch_size):
     total_query_vecs = np.asarray(total_query_vecs)
     total_reference_vecs = np.asarray(total_reference_vecs)
     return queries, total_query_vecs, references, total_reference_vecs
-
-

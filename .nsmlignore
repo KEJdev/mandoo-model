@@ -1,0 +1,7 @@
+__pycache__
+.git
+debug_data
+*.pkl
+checkpoints
+.github
+README.md

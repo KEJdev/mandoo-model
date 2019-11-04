@@ -17,7 +17,6 @@ def evaluate_mAP(result):
         mAP += pk_sum / correct_count
     return mAP / len(result)
 
-
 def evaluate_rank(result):
     mAP = 0.
     min_first_1_at_K = 0.
